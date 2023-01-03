@@ -1,5 +1,8 @@
 import React, {useReducer} from 'react';
 import {Button, TextField} from "@mui/material";
+import {useMutation, useQueryClient} from "react-query";
+import {getStudents, postStudent} from "../lib/helper";
+import {log} from "util";
 
 const reducer = (state, event)=>{
     return {
@@ -10,10 +13,32 @@ const reducer = (state, event)=>{
 
 const Form = (themes) => {
     const [formData, setFormData] = useReducer(reducer, {})
-
+    const queryClient = useQueryClient()
+    const addMutation = useMutation(postStudent, {
+        onSuccess:()=>{
+            queryClient.prefetchQuery('students', getStudents)
+        }
+    })
     const handleSubmit = (e)=>{
         e.preventDefault()
+        if(Object.keys(formData).length === 0){
+            return console.log('Form does not data')
+        }
+        let {name, age, email, phoneNumber, address, imageUrl} = formData
+        const model = {
+            name, age, phoneNumber, email, address, imageUrl
+        }
+        addMutation.mutate(model)
         console.log(formData)
+    }
+    if(addMutation.isLoading){
+        return <div>Loading.....</div>
+    }
+    if(addMutation.isSuccess){
+        return <div>Student added!!</div>
+    }
+    if(addMutation.isError){
+        return <div>{addMutation.error}</div>
     }
     return (
         <div className={`${themes.themes?"bg-gray-100":"bg-gray-700"}` + ' mt-5 p-10 border-none rounded-lg'}>

@@ -18,7 +18,7 @@ export default function Home() {
     }
 
   return (
-    <div className={`${theme?"bg-white h-screen":"bg-gray-900 h-screen"}`}>
+    <div className={`${theme?"bg-white h-screen":"bg-gray-900 h-full"}`}>
       <Head>
         <title>Student Management App</title>
       </Head>
