@@ -8,7 +8,7 @@ import {useState} from "react";
 export default function Home() {
     const [theme, setTheme] = useState(true);
     const [visible, setVisible] = useState(false);
-
+    //console.log(location.hostname)
     const handleChange = ()=>{
         setTheme(current=>!current)
     }
