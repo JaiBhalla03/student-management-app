@@ -7,7 +7,7 @@ const Table = (themes) => {
     console.log(data)
     return (
         <div className={`${themes.themes?"bg-gray-200":"bg-gray-800"}` + ' mt-5 mb-10 p-10 border-none rounded-lg'}>
-            {data.map((student)=>{
+            {data?.map((student)=>{
                 return (
                     <div key={student._id}>{student.name}</div>
                 )
