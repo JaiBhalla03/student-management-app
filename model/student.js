@@ -10,5 +10,6 @@ const studentSchema = new Schema({
     imageUrl: String
 })
 
+
 const Students = models.student || model('student', studentSchema)
 export default Students;
