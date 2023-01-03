@@ -39,7 +39,7 @@ const Form = (themes) => {
                     label="Phone Number"
                     type={'number'}
                     color={'primary'}
-                    name={'phone-number'}
+                    name={'phoneNumber'}
                     onChange={setFormData}
                 />
                 <TextField
@@ -60,7 +60,7 @@ const Form = (themes) => {
                     id="outlined-textarea"
                     label="Image-Url"
                     color={'primary'}
-                    name={'image-url'}
+                    name={'imageUrl'}
                     onChange={setFormData}
                 />
                 <Button
