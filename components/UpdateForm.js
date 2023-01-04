@@ -2,7 +2,7 @@ import React, {useReducer} from 'react';
 import {Button, TextField} from "@mui/material";
 import {useMutation, useQueryClient} from "react-query";
 import {getStudents, postStudent} from "../lib/helper";
-import {log} from "util";
+
 
 const reducer = (state, event)=>{
     return {
@@ -11,7 +11,7 @@ const reducer = (state, event)=>{
     }
 }
 
-const Form = (themes) => {
+const UpdateForm = (themes) => {
     const [formData, setFormData] = useReducer(reducer, {})
     const queryClient = useQueryClient()
     const addMutation = useMutation(postStudent, {
@@ -42,7 +42,7 @@ const Form = (themes) => {
     }
     return (
         <div className={`${themes.themes?"bg-gray-100":"bg-gray-700"}` + ' mt-5 p-10 border-none rounded-lg'}>
-            <h1 className={`${themes.themes?"text-black":"text-white"}` + ' text-3xl text-center mb-10'}>Add Student</h1>
+            <h1 className={`${themes.themes?"text-black":"text-white"}` + ' text-3xl text-center mb-10'}>Update Student Details</h1>
             <form className={'grid lg:grid-cols-2 gap-10'} onSubmit={handleSubmit}>
                 <TextField
                     id="outlined-textarea"
@@ -92,10 +92,10 @@ const Form = (themes) => {
                     className={'grid lg:col-span-2 w-40 bg-blue-600 m-auto'}
                     variant={'contained'}
                     type={'submit'}
-                >Add</Button>
+                >Edit</Button>
             </form>
         </div>
     );
 };
 
-export default Form;
+export default UpdateForm;

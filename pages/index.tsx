@@ -4,11 +4,16 @@ import Form from '../components/Form'
 import {Button, Switch, useStepContext} from "@mui/material";
 import {AiOutlineUserAdd} from 'react-icons/ai'
 import {useState} from "react";
+import UpdateForm from "../components/UpdateForm"
+import {useDispatch, useSelector} from "react-redux";
 
 export default function Home() {
     const [theme, setTheme] = useState(true);
     const [visible, setVisible] = useState(false);
-    //console.log(location.hostname)
+    const show = useSelector((state)=>state.app.client.updateFormVisible)
+    console.log(show)
+    const dispatch = useDispatch()
+
     const handleChange = ()=>{
         setTheme(current=>!current)
     }
@@ -44,6 +49,7 @@ export default function Home() {
                   {visible && (<Form themes={theme}/>)}
               </div>
               <Table themes={theme}/>
+              {show && (<UpdateForm themes={theme}/>)}
           </div>
       </main>
     </div>

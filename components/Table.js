@@ -1,15 +1,15 @@
 import React, {useEffect} from 'react';
 import {useQuery, useQueryClient} from "react-query";
-import {deleteStudent, getStudents} from "../lib/helper";
+import {deleteStudent, getStudent, getStudents} from "../lib/helper";
 import {createTheme} from "@mui/material";
 import {AiFillInfoCircle, AiTwotoneDelete, AiTwotoneEdit} from "react-icons/ai";
 import {log} from "util";
 import {useDispatch, useSelector} from "react-redux";
-import {deleteAction} from "../redux/reducer";
+import {deleteAction, getInfo} from "../redux/reducer";
+import {getCipherInfo} from "crypto";
 
 const Table = (themes) => {
     const {data, isLoading, isError, error} = useQuery("students", getStudents)
-    console.log(data)
     if(isLoading){
         return <div>Students are loading</div>
     }
@@ -67,6 +67,7 @@ const Table = (themes) => {
 const Tr = ({_id, imageUrl, name, age, phoneNumber, email}, theme)=>{
     const visible = useSelector((state)=>state.app.client.toggleForm)
     const deleteId = useSelector((state)=> state.app.client.deleteId)
+    const infoId = useSelector((state)=>state.app.client.studentInfo)
     const dispatch = useDispatch()
     const queryClient = useQueryClient()
     const onDelete = async()=>{
@@ -77,6 +78,15 @@ const Tr = ({_id, imageUrl, name, age, phoneNumber, email}, theme)=>{
                 await queryClient.prefetchQuery('students', getStudents)
                 await dispatch(deleteAction(null))
             }
+        }
+    }
+    const onInfo = async()=>{
+        dispatch(getInfo(_id))
+        if(infoId){
+            const data = await getStudent(infoId);
+            console.log(data);
+            alert('Check the console')
+            await dispatch(getInfo({}))
         }
     }
     return(
@@ -108,7 +118,7 @@ const Tr = ({_id, imageUrl, name, age, phoneNumber, email}, theme)=>{
             </td>
             <td className={'text-center p-1 text-lg border-gray-400 border-2'}>
                 <span className={'flex gap-4 justify-around'}>
-                    <button>
+                    <button onClick={onInfo}>
                         <AiFillInfoCircle size={24} className={'cursor-pointer hover:scale-125 hover:ease-in transition duration-150'}/>
                     </button>
                     <button onClick={onDelete}>
