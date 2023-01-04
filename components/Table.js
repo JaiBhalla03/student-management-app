@@ -1,8 +1,11 @@
 import React, {useEffect} from 'react';
-import {useQuery} from "react-query";
-import {getStudents} from "../lib/helper";
+import {useQuery, useQueryClient} from "react-query";
+import {deleteStudent, getStudents} from "../lib/helper";
 import {createTheme} from "@mui/material";
 import {AiFillInfoCircle, AiTwotoneDelete, AiTwotoneEdit} from "react-icons/ai";
+import {log} from "util";
+import {useDispatch, useSelector} from "react-redux";
+import {deleteAction} from "../redux/reducer";
 
 const Table = (themes) => {
     const {data, isLoading, isError, error} = useQuery("students", getStudents)
@@ -57,12 +60,25 @@ const Table = (themes) => {
                     </tbody>
                 </table>
             </div>
-
         </div>
     );
 };
 
-const Tr = ({imageUrl, name, age, phoneNumber, email}, theme)=>{
+const Tr = ({_id, imageUrl, name, age, phoneNumber, email}, theme)=>{
+    const visible = useSelector((state)=>state.app.client.toggleForm)
+    const deleteId = useSelector((state)=> state.app.client.deleteId)
+    const dispatch = useDispatch()
+    const queryClient = useQueryClient()
+    const onDelete = async()=>{
+        if(!visible){
+            dispatch(deleteAction(_id))
+            if(deleteId){
+                await deleteStudent(deleteId);
+                await queryClient.prefetchQuery('students', getStudents)
+                await dispatch(deleteAction(null))
+            }
+        }
+    }
     return(
         <tr>
             <td className={'text-center border-gray-400 border-2'}>
@@ -92,9 +108,15 @@ const Tr = ({imageUrl, name, age, phoneNumber, email}, theme)=>{
             </td>
             <td className={'text-center p-1 text-lg border-gray-400 border-2'}>
                 <span className={'flex gap-4 justify-around'}>
-                    <AiFillInfoCircle size={24} className={'cursor-pointer hover:scale-125 hover:ease-in transition duration-150'}/>
-                    <AiTwotoneDelete size={24} className={'cursor-pointer hover:scale-125 hover:ease-in transition duration-150'}/>
-                    <AiTwotoneEdit size={24} className={'cursor-pointer hover:scale-125 hover:ease-in transition duration-150'}/>
+                    <button>
+                        <AiFillInfoCircle size={24} className={'cursor-pointer hover:scale-125 hover:ease-in transition duration-150'}/>
+                    </button>
+                    <button onClick={onDelete}>
+                        <AiTwotoneDelete size={24} className={'cursor-pointer hover:scale-125 hover:ease-in transition duration-150'}/>
+                    </button>
+                    <button>
+                        <AiTwotoneEdit size={24} className={'cursor-pointer hover:scale-125 hover:ease-in transition duration-150'}/>
+                    </button>
                 </span>
             </td>
         </tr>
