@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {deleteAction, getInfo} from "../redux/reducer";
 import {getCipherInfo} from "crypto";
 import axios from "axios";
+import Image from "next/image";
 
 
 const Table = (themes) => {
@@ -111,7 +112,7 @@ const Tr = ({_id, imageUrl, name, age, phoneNumber, email}, theme)=>{
         <tr>
             <td className={'text-center border-gray-400 border-2'}>
                 <span>
-                    <img src={imageUrl} alt={''}/>
+                    <Image src={imageUrl} alt={''} width={25} height={25}/>
                 </span>
             </td>
             <td className={'text-center p-1 text-lg border-gray-400 border-2'}>
