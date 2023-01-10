@@ -1,21 +1,39 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useQuery, useQueryClient} from "react-query";
-import {deleteStudent, getStudent, getStudents} from "../lib/helper";
+import {deleteStudent, getStudent} from "../lib/helper";
 import {createTheme} from "@mui/material";
 import {AiFillInfoCircle, AiTwotoneDelete, AiTwotoneEdit} from "react-icons/ai";
 import {log} from "util";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteAction, getInfo} from "../redux/reducer";
 import {getCipherInfo} from "crypto";
+import axios from "axios";
+
 
 const Table = (themes) => {
-    const {data, isLoading, isError, error} = useQuery("students", getStudents)
-    if(isLoading){
-        return <div>Students are loading</div>
+    //const {data, isLoading, isError, error} = useQuery("students", getStudents)
+    const[data, setData] = useState([])
+    const[loading, setLoading] = useState(true);
+    async function getStudents(){
+        try{
+            const students = await axios.get(`/api/students`);
+            setData(students.data)
+            setLoading(false)
+            // return students.data
+        }
+        catch(err){
+            return new Error(err);
+        }
     }
-    if(isError){
-        return <div>Error: {error}</div>
-    }
+    useEffect(() => {
+        getStudents();
+    },[])
+    // if(loading){
+    //     return <div>Students are loading</div>
+    // }
+    // if(isError){
+    //     return <div>Error: {error}</div>
+    // }
     return (
         <div className={`${themes.themes?"bg-gray-200":"bg-gray-800"}` + ' mt-5 mb-10 p-10 border-none rounded-lg'}>
             <h1 className={`${themes.themes?"":"text-white"}` + ' text-center mb-5 text-3xl font-bold'}>Students</h1>

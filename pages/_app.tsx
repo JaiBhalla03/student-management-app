@@ -13,7 +13,6 @@ export default function App({ Component, pageProps }: AppProps) {
           <Provider store={store}>
               <Component {...pageProps} />
           </Provider>
-          <ReactQueryDevtools initialIsOpen={false} position={'bottom-right'}/>
       </QueryClientProvider>
   )
 }
